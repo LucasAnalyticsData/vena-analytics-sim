@@ -145,4 +145,3 @@ vena-analytics-sim/
 ├── docs/                      # uso-ia.md e documentação complementar
 ├── bugs/registry.md           # Registro de bugs reais encontrados e corrigidos
 └── .github/workflows/ci.yml   # CI (testes a cada push)
-```
