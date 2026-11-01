@@ -1,0 +1,17 @@
+services:
+  # Simula o banco transacional de um ERP de loja (fonte "banco transacional" da JD)
+  postgres:
+    image: postgres:16
+    container_name: vena_sim_postgres
+    environment:
+      POSTGRES_USER: vena_sim
+      POSTGRES_PASSWORD: vena_sim_local_only
+      POSTGRES_DB: erp_lojas
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./src/sql/init_postgres.sql:/docker-entrypoint-initdb.d/init.sql
+      - vena_sim_pgdata:/var/lib/postgresql/data
+
+volumes:
+  vena_sim_pgdata:

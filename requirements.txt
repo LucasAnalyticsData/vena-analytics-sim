@@ -1,0 +1,20 @@
+# Semana 1 — fundamentos
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pandas==2.2.2
+psycopg2-binary==2.9.9
+google-cloud-storage==2.18.2
+google-cloud-bigquery==3.25.0
+pyarrow==17.0.0  # google-cloud-bigquery.load_table_from_dataframe exige isso, nao vem junto sozinho
+python-dotenv==1.0.1
+
+# Semana 2 — orquestração e scraping
+dagster==1.13.27
+dagster-webserver==1.13.27
+google-cloud-pubsub==2.23.0
+requests==2.32.3
+beautifulsoup4==4.12.3
+
+# Semana 3 — produção
+functions-framework==3.8.1  # para rodar Cloud Functions localmente antes do deploy
+pytest==8.3.3

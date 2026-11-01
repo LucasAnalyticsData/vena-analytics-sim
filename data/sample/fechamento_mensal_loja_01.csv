@@ -1,0 +1,71 @@
+loja_id,competencia,categoria,tipo,descricao,valor
+1,2026-08,receita,credito,Vendas balcao,45100.00
+1,2026-08,receita,credito,Vendas marketplace,10800.00
+1,2026-08,despesa,debito,Aluguel,6000.00
+1,2026-08,despesa,debito,Folha de pagamento,18500.00
+1,2026-08,despesa,debito,Fornecedores,19800.40
+1,2026-08,despesa,debito,Energia e agua,1390.00
+1,2026-08,despesa,debito,Marketing,1900.00
+1,2026-09,receita,credito,Vendas balcao,48250.30
+1,2026-09,receita,credito,Vendas marketplace,12100.00
+1,2026-09,despesa,debito,Aluguel,6000.00
+1,2026-09,despesa,debito,Folha de pagamento,18500.00
+1,2026-09,despesa,debito,Fornecedores,21300.75
+1,2026-09,despesa,debito,Energia e agua,1450.20
+1,2026-09,despesa,debito,Marketing,2200.00
+2,2026-08,receita,credito,Vendas balcao,37200.00
+2,2026-08,receita,credito,Vendas marketplace,7950.00
+2,2026-08,despesa,debito,Aluguel,5200.00
+2,2026-08,despesa,debito,Folha de pagamento,15400.00
+2,2026-08,despesa,debito,Fornecedores,16100.00
+2,2026-08,despesa,debito,Energia e agua,1080.00
+2,2026-08,despesa,debito,Marketing,1200.00
+2,2026-09,receita,credito,Vendas balcao,39800.00
+2,2026-09,receita,credito,Vendas marketplace,8900.50
+2,2026-09,despesa,debito,Aluguel,5200.00
+2,2026-09,despesa,debito,Folha de pagamento,15400.00
+2,2026-09,despesa,debito,Fornecedores,17600.10
+2,2026-09,despesa,debito,Energia e agua,1120.00
+2,2026-09,despesa,debito,Marketing,1500.00
+3,2026-08,receita,credito,Vendas balcao,28400.00
+3,2026-08,receita,credito,Vendas marketplace,5100.00
+3,2026-08,despesa,debito,Aluguel,4200.00
+3,2026-08,despesa,debito,Folha de pagamento,12800.00
+3,2026-08,despesa,debito,Fornecedores,12950.00
+3,2026-08,despesa,debito,Energia e agua,890.00
+3,2026-08,despesa,debito,Marketing,950.00
+3,2026-09,receita,credito,Vendas balcao,30650.00
+3,2026-09,receita,credito,Vendas marketplace,5820.00
+3,2026-09,despesa,debito,Aluguel,4200.00
+3,2026-09,despesa,debito,Folha de pagamento,12800.00
+3,2026-09,despesa,debito,Fornecedores,13700.25
+3,2026-09,despesa,debito,Energia e agua,910.00
+3,2026-09,despesa,debito,Marketing,1050.00
+4,2026-08,receita,credito,Vendas balcao,24600.00
+4,2026-08,receita,credito,Vendas marketplace,4200.00
+4,2026-08,despesa,debito,Aluguel,3800.00
+4,2026-08,despesa,debito,Folha de pagamento,11200.00
+4,2026-08,despesa,debito,Fornecedores,11100.00
+4,2026-08,despesa,debito,Energia e agua,780.00
+4,2026-08,despesa,debito,Marketing,820.00
+4,2026-09,receita,credito,Vendas balcao,26150.00
+4,2026-09,receita,credito,Vendas marketplace,4680.00
+4,2026-09,despesa,debito,Aluguel,3800.00
+4,2026-09,despesa,debito,Folha de pagamento,11200.00
+4,2026-09,despesa,debito,Fornecedores,11890.50
+4,2026-09,despesa,debito,Energia e agua,805.00
+4,2026-09,despesa,debito,Marketing,900.00
+5,2026-08,receita,credito,Vendas balcao,51800.00
+5,2026-08,receita,credito,Vendas marketplace,11400.00
+5,2026-08,despesa,debito,Aluguel,7200.00
+5,2026-08,despesa,debito,Folha de pagamento,20100.00
+5,2026-08,despesa,debito,Fornecedores,22700.00
+5,2026-08,despesa,debito,Energia e agua,1560.00
+5,2026-08,despesa,debito,Marketing,2100.00
+5,2026-09,receita,credito,Vendas balcao,55300.00
+5,2026-09,receita,credito,Vendas marketplace,12650.00
+5,2026-09,despesa,debito,Aluguel,7200.00
+5,2026-09,despesa,debito,Folha de pagamento,20100.00
+5,2026-09,despesa,debito,Fornecedores,24180.60
+5,2026-09,despesa,debito,Energia e agua,1610.00
+5,2026-09,despesa,debito,Marketing,2350.00
