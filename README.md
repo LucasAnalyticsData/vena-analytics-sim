@@ -82,6 +82,14 @@ Cada tabela do BigQuery tem `OPTIONS(description=...)` em nível de coluna
 (governança de dado — qualquer pessoa explorando o schema no Console entende
 o que cada campo significa sem perguntar).
 
+## Dashboard (Looker Studio)
+
+[📊 Ver dashboard exportado (PDF)](docs/Projeto_Vena.pdf)
+
+Painel conectado direto em `curated.dre_gerencial`, consumindo o resultado final do
+pipeline — nenhum número é digitado manualmente, tudo vem de consulta ao vivo no
+BigQuery.
+
 ## Como rodar localmente
 
 ```powershell
@@ -145,3 +153,5 @@ vena-analytics-sim/
 ├── docs/                      # uso-ia.md e documentação complementar
 ├── bugs/registry.md           # Registro de bugs reais encontrados e corrigidos
 └── .github/workflows/ci.yml   # CI (testes a cada push)
+
+
