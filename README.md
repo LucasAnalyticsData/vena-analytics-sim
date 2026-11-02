@@ -39,7 +39,7 @@ flowchart LR
     end
 
     BQ_STG[("BigQuery<br/>staging.*<br/>particionado/clusterizado")]
-    BQ_CUR[("BigQuery<br/>curated.*<br/>DRE + Curva ABC")]
+    BQ_CUR[("BigQuery<br/>curated.*<br/>DRE + Curva ABC + Comparativo Preços")]
     LOOKER["Looker Studio<br/>(dashboard)"]
 
     API --> RAW
@@ -76,11 +76,31 @@ roda por schedule).
 
 - **raw**: dado bruto, sem nenhuma transformação — snapshot exato do que a fonte devolveu.
 - **staging**: schema padronizado e tipado (`src/sql/schema_staging.sql`), sem regra de negócio. Uma tabela por fonte heterogênea (API, CSV, scraping), mesmo formato de saída.
-- **curated**: regra de negócio aplicada — DRE gerencial e Curva ABC. É o que o BI consome; ninguém fora da engenharia consulta staging diretamente.
+- **curated**: regra de negócio aplicada — DRE gerencial, Curva ABC e Comparativo de Preços. É o que o BI consome; ninguém fora da engenharia consulta staging diretamente.
 
 Cada tabela do BigQuery tem `OPTIONS(description=...)` em nível de coluna
 (governança de dado — qualquer pessoa explorando o schema no Console entende
 o que cada campo significa sem perguntar).
+
+## Comparativo de Preços (scraping + vendas)
+
+`curated.comparativo_precos` (`src/sql/curated_comparativo_precos.sql`) cruza
+o preço médio praticado por loja (`staging.vendas`) com o preço médio de
+mercado coletado via scraping (`staging.precos_concorrente`), calculando um
+`gap_percentual` por produto: positivo significa que a loja está mais cara
+que a concorrência, negativo que está mais barata.
+
+É a tabela que fecha o ciclo do scraping — não basta coletar o preço do
+concorrente, o valor de negócio só aparece quando ele é comparado com o
+próprio preço. No dado atual do projeto, por exemplo, "Desodorante Colônia
+Oceano 100ml" aparece 85% mais caro que a média dos concorrentes monitorados
+— o tipo de sinal que, numa operação real, dispararia uma revisão de preço.
+
+O `JOIN` é feito só por `produto_nome` (não por loja), porque preço de
+concorrente é informação de mercado, não específica de uma loja sua — por
+isso, apenas os produtos que o scraping efetivamente monitora aparecem
+nesse comparativo; os demais ficam de fora até o mock do concorrente cobrir
+mais itens do catálogo.
 
 ## Dashboard (Looker Studio)
 
@@ -103,6 +123,11 @@ uvicorn src.scraping.mock_concorrente_site:app --reload --port 8001
 
 # 3. Pipeline
 dagster job execute -f src\dagster_project\definitions.py -j pipeline_painel_multi_loja
+
+# 4. Tabelas curated derivadas (rodam manualmente após o pipeline, não via Dagster)
+Get-Content -Raw src\sql\curated_dre_gerencial.sql | bq query --use_legacy_sql=false
+Get-Content -Raw src\sql\curated_curva_abc.sql | bq query --use_legacy_sql=false
+Get-Content -Raw src\sql\curated_comparativo_precos.sql | bq query --use_legacy_sql=false
 ```
 
 ## Testes e qualidade de dado
@@ -136,6 +161,7 @@ Itens conscientemente deixados de fora nesta fase, com a razão de cada um:
 - **Workload Identity Federation** no CI/CD — deploy automatizado sem chave de Service Account armazenada. Esforço alto, ganho baixo nesse estágio do projeto.
 - **Sensor Pub/Sub real** — hoje o pipeline dispara por `schedule` (cron diário); a evolução natural é um sensor do Dagster escutando o tópico Pub/Sub que o Eventarc já usa por baixo, disparando o job no momento em que o arquivo chega, não num horário fixo.
 - **Cloud Run para o site de scraping mock** — hoje só local; replicar o mesmo deploy do mock API.
+- **Comparativo de preços por loja** — hoje o preço de concorrente é por produto (mercado), não por loja; se o scraping evoluir pra simular variação regional de preço, o comparativo ganharia granularidade.
 
 ## Estrutura do projeto
 
@@ -150,8 +176,7 @@ vena-analytics-sim/
 │   └── sql/                   # DDL staging + queries curated
 ├── tests/                     # pytest
 ├── infra/                     # Políticas de infraestrutura (lifecycle GCS)
-├── docs/                      # uso-ia.md e documentação complementar
+├── docs/                      # uso-ia.md, dashboard exportado e documentação complementar
 ├── bugs/registry.md           # Registro de bugs reais encontrados e corrigidos
 └── .github/workflows/ci.yml   # CI (testes a cada push)
-
-
+```
