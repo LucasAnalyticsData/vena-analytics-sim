@@ -17,12 +17,13 @@ trade-offs, limites conhecidos e o que mudaria em escala de produção real.
    (`src/sql/schema_staging.sql`) — não deixamos o BigQuery inferir schema
    via autodetect, porque inferência pode divergir silenciosamente do tipo
    real esperado (ex: DATE virando STRING), erro que só aparece mais tarde.
-3. **Regra de negócio (curated)** — `curated_dre_gerencial` e
-   `curated_curva_abc` leem das tabelas staging e aplicam as regras reais:
-   cálculo de margem líquida, classificação ABC por faturamento acumulado
-   (lógica de janela exclusiva — ver seção abaixo). Essas tabelas são o
-   contrato com quem consome (BI, outros times); staging nunca é consultado
-   fora da engenharia.
+3. **Regra de negócio (curated)** — três tabelas, cada uma rodada
+   manualmente via SQL após o pipeline Dagster popular o staging:
+   `curated_dre_gerencial.sql` (margem líquida por loja/competência),
+   `curated_curva_abc.sql` (classificação ABC por faturamento acumulado) e
+   `curated_comparativo_precos.sql` (gap entre preço próprio e preço de
+   mercado). Essas tabelas são o contrato com quem consome (BI, outros
+   times); staging nunca é consultado fora da engenharia.
 4. **Consumo (BI)** — Looker Studio lê direto de `curated.*`.
 
 ## Por que Software-Defined Assets (e não jobs imperativos)
@@ -67,6 +68,20 @@ sem erro, sem log de alerta, só um número errado em produção. `WRITE_TRUNCAT
 garante que cada materialização reflete exatamente o estado atual da fonte,
 nunca acumula execuções anteriores.
 
+## Comparativo de preços: por que o JOIN é só por produto, não por loja
+
+`staging.precos_concorrente` não tem `loja_id` — preço de concorrente é
+informação de mercado (o que o concorrente cobra, de modo geral), não uma
+variação por loja sua. Por isso `curated_comparativo_precos.sql` junta
+`staging.vendas` (que tem `loja_id`) com `staging.precos_concorrente` (que
+não tem) usando só `produto_nome` como chave — o resultado é "preço desta
+loja, para este produto, comparado ao preço médio de mercado para o mesmo
+produto". Uma consequência direta: nomes de produto entre as duas fontes
+precisam bater exatamente, byte a byte — isso quebrou na primeira versão do
+projeto (o catálogo do site mock de concorrente usava nomes parecidos, mas
+não idênticos, ao catálogo real do mock API) e foi corrigido alinhando os
+nomes entre as duas fontes.
+
 ## Limites conhecidos desta versão (escopo de demo, não produção)
 
 - **Schedule, não evento real** — o pipeline roda por cron diário
@@ -86,6 +101,9 @@ nunca acumula execuções anteriores.
   (service-to-service auth via Cloud Run invoker role, por exemplo).
 - **CI sem deploy automatizado** — ver tabela de decisões no README
   (WIF documentado como próximo passo).
+- **Comparativo de preço sem granularidade de loja** — o preço de
+  concorrente coletado hoje é único por produto (mercado), não varia por
+  loja/região; isso é limitação do mock, não da arquitetura do `JOIN`.
 
 ## O que mudaria numa escala de produção real (não implementado aqui, por propósito)
 
